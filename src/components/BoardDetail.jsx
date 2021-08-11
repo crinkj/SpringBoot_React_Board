@@ -64,7 +64,7 @@ class BoardDetail extends Component {
                                         <label> 글 번호</label>
                                         <input type="text"  name="title" className="form-control" 
                                         value={this.state.board.idx} readOnly/> 
-                                        작성시간: {this.state.board.insertTime}   수정시간: {this.state.board.updateTime}
+                                        작성시간: {this.state.board.insertTime} &nbsp; 수정시간: {this.state.board.updateTime}
                                     </div>
                                     <div className = "form-group">
                                         <label> 제목 </label>

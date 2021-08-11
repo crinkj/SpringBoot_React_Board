@@ -4,8 +4,8 @@ const Board_API = "http://localhost:8080/api/board";
 
 class BoardService {
   // 게시글 리스트 api
-  getBoardList() {
-    return axios.get(Board_API);
+  getBoardList(p_num) {
+    return axios.get(Board_API + "?p_num=" + p_num);
   }
 
   // 게시글 작성 api
