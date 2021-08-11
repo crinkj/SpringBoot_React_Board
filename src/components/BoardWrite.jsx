@@ -2,92 +2,150 @@ import React, { Component } from 'react';
 import BoardService from '../service/BoardService';
 
 class BoardWrite extends Component {
+    // 생성자
     constructor(props) {
         super(props);
 
         this.state = {
-            type: '',
+            idx: this.props.match.params.idx,
             title: '',
-            contents: '',
-            memberNo: ''
+            content: '',
+            writer: ''
         }
 
-        this.changeTypeHandler = this.changeTypeHandler.bind(this);
+        // 버튼에 달기위한 생성자
         this.changeTitleHandler = this.changeTitleHandler.bind(this);
-        this.changeContentsHandler = this.changeContentsHandler.bind(this);
-        this.changeMemberNoHandler = this.changeMemberNoHandler.bind(this);
-        this.createBoard = this.createBoard.bind(this);
+        this.changeContentHandler = this.changeContentHandler.bind(this);
+        this.changeWriterHandler = this.changeWriterHandler.bind(this);
+        this.writeBoard = this.writeBoard.bind(this);
     }
 
-    changeTypeHandler = (event) => {
-        this.setState({type: event.target.value});
-    }
-
+    // 제목 state값
     changeTitleHandler = (event) => {
         this.setState({title: event.target.value});
     }
-    
-    changeContentsHandler = (event) => {
-        this.setState({contents: event.target.value});
-    }
-    
-    changeMemberNoHandler = (event) => {
-        this.setState({memberNo: event.target.value});
+
+    // 내용 state값
+    changeContentHandler = (event) => {
+        this.setState({content: event.target.value});
     }
 
-    createBoard = (event) => {
+    // 작성자 state값
+    changeWriterHandler = (event) => {
+        this.setState({writer: event.target.value});
+    }
+
+    writeBoard = (event) => {
         event.preventDefault();
         let board = {
-            type: this.state.type,
+            idx: this.props.match.params.idx,
             title: this.state.title,
-            contents: this.state.contents,
-            memberNo: this.state.memberNo
+            content: this.state.content,
+            writer: this.state.writer
         };
-        console.log("board => "+ JSON.stringify(board));
-        BoardService.createBoard(board).then(res => {
-            this.props.history.push('/board');
-        });
+        
+        console.log("board:" + JSON.stringify(board));
+        if(this.state.idx === "write"){
+             // 공백 체크
+            if(board.title.trim() === ""){
+                alert("제목을 입력해주세요");
+            }else if(board.content.trim() === ""){
+                alert("내용을 입력해주세요");
+            }else if(board.writer.trim() === ""){
+                alert("작성자를 입력해주세요");
+            }else{
+                // BoardService.writeBoard에 작성한 Board넣기 성공후 /로 
+                board.idx = 0
+                BoardService.writeBoard(board).then(res => {
+                        this.props.history.push('/');
+                }).catch(err => { 
+                    alert("등록 실패했습니다."); 
+                })
+            }
+        }else{
+            // 공백 체크
+            if(board.title.trim() === ""){
+                alert("제목을 입력해주세요");
+            }else if(board.content.trim() === ""){
+                alert("내용을 입력해주세요");
+            }else if(board.writer.trim() === ""){
+                alert("작성자를 입력해주세요");
+            }else{
+                // BoardService.writeBoard에 작성한 Board넣기 성공후 /로 
+                BoardService.updateBoard(this.state.idx,board).then(res => {
+                        this.props.history.push('/');
+                }).catch(err => { 
+                    alert("수정 실패했습니다."); 
+                })
+            }
+        }
+   
     }
 
     cancel() {
         this.props.history.push('/');
     }
 
+    getTitle() {
+        if (this.state.idx === 'write') {
+            return <h3 className="text-center">게시글 작성</h3>
+        } else {
+            return <h3 className="text-center">게시글 수정</h3>
+        }
+    }
+    
+    // 버튼 텍스트 수정/등록 parameter에 따라 나누기
+    getButton() {
+        if (this.state.idx === 'write') {
+            return "등록하기"
+        } else {
+            return "수정하기"
+        }
+    }
+
+    // board state채워
+    componentDidMount() {
+        if (this.state.idx === 'write') {
+            return false;
+        } else {
+            BoardService.getBoardDetail(this.state.idx).then( (res) => {
+                let board = res.data;
+                this.setState({
+                        writer: board.writer,
+                        title: board.title,
+                        content: board.content,
+                        idx: board.idx
+                    });
+            });
+        }
+    }
 
     render() {
         return (
             <div>
-                <div className = "container">
+                <div className = "container" style={{marginTop:"50px"}}>
                     <div className = "row">
                         <div className = "card col-md-6 offset-md-3 offset-md-3">
-                            <h3 className="text-center">새글을 작성해주세요</h3>
+                            <h3 className="text-center">{this.getTitle()}</h3>
                             <div className = "card-body">
-                                <form>
+                                <form >
                                     <div className = "form-group">
-                                        <label> Type </label>
-                                        <select placeholder="type" name="type" className="form-control" 
-                                        value={this.state.type} onChange={this.changeTypeHandler}>
-                                            <option value="1">자유게시판</option>
-                                            <option value="2">질문과 답변</option>
-                                        </select>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Title </label>
-                                        <input type="text" placeholder="title" name="title" className="form-control" 
+                                        <label> 제목 </label>
+                                        <input type="text" placeholder="제목" name="title" className="form-control" 
                                         value={this.state.title} onChange={this.changeTitleHandler}/>
                                     </div>
                                     <div className = "form-group">
-                                        <label> Contents  </label>
-                                        <textarea placeholder="contents" name="contents" className="form-control" 
-                                        value={this.state.contents} onChange={this.changeContentsHandler}/>
+                                        <label> 내용  </label>
+                                        <textarea placeholder="내용" name="content" className="form-control" 
+                                        value={this.state.content} onChange={this.changeContentHandler}/>
                                     </div>
                                     <div className = "form-group">
-                                        <label> MemberNo  </label>
-                                        <input placeholder="memberNo" name="memberNo" className="form-control" 
-                                        value={this.state.memberNo} onChange={this.changeMemberNoHandler}/>
+                                        <label> 작성자  </label>
+                                        <input placeholder="작성자" name="writer" className="form-control" 
+                                        value={this.state.writer} onChange={this.changeWriterHandler}/>
                                     </div>
-                                    <button className="btn btn-success" onClick={this.createBoard}>Save</button>
-                                    <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft:"10px"}}>Cancel</button>
+                                    <button className="btn btn-success" onClick={this.writeBoard}>{this.getButton()}</button>
+                                    <button className="btn btn-danger" onClick={this.cancel.bind(this)} style={{marginLeft:"10px"}}>뒤로가기</button>
                                 </form>
                             </div>
                         </div>

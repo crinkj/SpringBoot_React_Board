@@ -44,26 +44,14 @@ class BoardList extends Component {
     }
 
     render() {
-        // 검색기능 제목과 검색창이 같을경우
-            const searchBoard = (data) => {
-                data = data.filter(
-                    (board)=>{
-                        return board.title.indexOf(this.state.keyword) > -1;
-                    }
-                )
-                return data.map((board) => {
-                        return(
-                            <tr key = {board.idx}>
-                                <td> {board.idx} </td>
-                                <td><button  className="btn btn-link" onClick = {() => this.BoardDetail(board.idx)}> {board.title}</button></td>
-                                <td> {board.insertTime} </td>
-                                <td> {board.updateTime} </td>
-                                <td> {board.viewCnt} </td>
-                            </tr>
-                            )
-                })
-            }
-
+        const boardFilter = (boards) =>{
+            boards = boards.filter(
+                (boards) =>{
+                    return boards.title.indexOf(this.state.keyword) > -1;
+                }
+            );
+            return boards.map
+        }
         return (
             <div>
                 <h2 className="text-left">게시판</h2>
@@ -84,7 +72,17 @@ class BoardList extends Component {
                         </thead>
                         <tbody>
                             {
-                                searchBoard(this.state.boards)
+                              boardFilter( this.state.boards.map)(
+                                    board => 
+                                    <tr key = {board.idx}>
+                                        
+                                        <td> {board.idx} </td>
+                                        <td><button  className="btn btn-primary" onClick = {() => this.BoardDetail(board.idx)}> {board.title}</button></td>
+                                        <td> {board.insertTime} </td>
+                                        <td> {board.updateTime} </td>
+                                        <td> {board.viewCnt} </td>
+                                    </tr>
+                                )
                             }
                         </tbody>
                     </table>
