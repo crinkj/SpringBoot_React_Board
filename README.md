@@ -7,7 +7,6 @@
      &nbsp;&nbsp;  &nbsp;&nbsp; JAVA: Spring Boot 2.5.3, JDK 1.8, axios<br>
       &nbsp;&nbsp; &nbsp;&nbsp; DB: MYSQL(AWS EC2에 MySQL설치해서 사용했습니다. 로컬아닌 DB연결되어있습니다.)<br>
        &nbsp;&nbsp; &nbsp;&nbsp;사용 라이브러리: log4JDBC, mybatis<br>
- 
    &nbsp;&nbsp; &nbsp;&nbsp;기능 구현: <br>
      &nbsp;&nbsp; &nbsp;&nbsp;  1) 게시판 등록, 리스트 보기, 상세 보기 <br>
     &nbsp;&nbsp;  &nbsp;&nbsp;  2) 게시판 수정 및 삭제 : 게시판 상세보기에서 수정하기 누른 후 작성자 이름을 Promt창에 입력후 맞으면 수정하기 페이지로 이동.<br>
