@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.board.mapper.BoardMapper">
+
+	<select id="getBoardList" resultType="com.board.dto.BoardDto" parameterType="hashMap">
+	<![CDATA[
+		 select
+	 		idx,
+			title,
+			writer,
+			view_cnt,
+			DATE_FORMAT(insert_time,'%Y/%m/%d %h:%i') as insertTime,
+			DATE_FORMAT(update_time,'%Y/%m/%d %h:%i') as updateTime
+		 from
+		 	board.tb_board
+		 order by
+		 	idx asc
+		 limit #{StartNum}, #{countPerPage}
+	]]>
+	</select>
+
+	<insert id="writeBoard" parameterType="com.board.dto.BoardDto">
+	<![CDATA[
+		INSERT INTO
+			board.tb_board
+				(
+				`title`,
+				`content`,
+				`writer`,
+				`insert_time`
+				)
+			VALUES
+				(
+				#{title},
+				#{content},
+				#{writer},
+				now()
+				)
+	]]>
+	</insert>
+
+	<select id="getBoardDetail" resultType="com.board.dto.BoardDto">
+	<![CDATA[
+		 select
+	 		idx,
+			title,
+			writer,
+			content,
+			view_cnt,
+			DATE_FORMAT(insert_time,'%Y/%m/%d %h:%i') as insertTime,
+			DATE_FORMAT(update_time,'%Y/%m/%d %h:%i') as updateTime
+		 from
+		 	board.tb_board
+		 where
+		 	idx = #{idx}
+	]]>
+	</select>
+
+	<update id="increaseViewCnt" parameterType="com.board.dto.BoardDto">
+	<![CDATA[
+		 UPDATE
+		 	board.tb_board
+		 SET
+		 	view_cnt = view_cnt+1
+		 where
+		 	idx = #{idx}
+	]]>
+	</update>
+
+	<update id="updateBoard" parameterType="com.board.dto.BoardDto">
+	<![CDATA[
+		 UPDATE
+		 	board.tb_board
+		 SET
+		 	title = #{title},
+		 	content = #{content},
+		 	writer = #{writer},
+		 	update_time = now()
+		 WHERE
+		 	idx = #{idx}
+
+	]]>
+	</update>
+
+	<delete id="deleteBoard" parameterType="com.board.dto.BoardDto">
+	<![CDATA[
+		 DELETE
+		 FROM
+		 	board.tb_board
+		 WHERE
+		 	idx = #{idx}
+
+	]]>
+	</delete>
+	<select id="findAllCount" resultType="Integer">
+	<![CDATA[
+		SELECT
+			count(idx) as count
+		FROM board.tb_board;
+	]]>
+	</select>
+
+
+</mapper>
