@@ -1,9 +1,9 @@
 <h1>Spring Boot 와 React 게시판 프로젝트<br></h1>
 
 <h3>개발 환경: <br></h3>
-  <h4>프론트 엔드)<br></h4>
+  <h4>프론트 엔드)</h4>
       &nbsp;&nbsp; &nbsp;&nbsp; 리액트, 부트스트랩<br>
- <h4>백엔드)<br><h4>
+ <h4>백엔드)</h4>
      &nbsp;&nbsp;  &nbsp;&nbsp; JAVA: Spring Boot 2.5.3, JDK 1.8, axios<br>
       &nbsp;&nbsp; &nbsp;&nbsp; DB: MYSQL(AWS EC2에 MySQL설치해서 사용했습니다. 로컬아닌 DB연결되어있습니다.)<br>
        &nbsp;&nbsp; &nbsp;&nbsp;사용 라이브러리: log4JDBC, mybatis<br>
